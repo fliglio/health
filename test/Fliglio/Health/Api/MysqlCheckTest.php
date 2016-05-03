@@ -15,7 +15,7 @@ class MysqlCheckTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_CheckDown() {
 		$manager = new HealthManager();
-		$manager->addCheck(new MysqlCheck('localhost', 'notauser', ''));
+		$manager->addCheck(new MysqlCheck('localhost', 'root', 'badpasswordandstuff'));
 
 		$this->assertTrue($manager->runAll()->isDown());
 	}
