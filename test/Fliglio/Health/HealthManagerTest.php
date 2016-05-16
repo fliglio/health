@@ -31,6 +31,13 @@ class HealthManagerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($manager->runAll()->isUp());
 	}
 
+	public function test_TopLevelStatusReportsUpWhenWarn() {
+		$manager = new HealthManager();
+		$manager->addCheck(new AlwaysDown(), true);
+
+		$this->assertTrue($manager->runAll()->isUp());
+	}
+
 	public function test_HealthStatusObjectMapper() {
 		$objMpr  = new HealthStatusObjectMapper();
 		$manager = new HealthManager();
