@@ -7,15 +7,17 @@ class MysqlCheck implements HealthCheck {
 	private $host;
 	private $user;
 	private $pass;
+	private $prefix;
 
-	public function __construct($host, $user, $pass) {
+	public function __construct($host, $user, $pass, $prefix=null) {
 		$this->host = $host;
 		$this->user = $user;
 		$this->pass = $pass;
+		$this->prefix = $prefix;
 	}
 
 	public function getKey() {
-		return 'mysql::'.$this->host.';'.$this->user;
+		return sprintf('%smysql::%s;%s', $this->prefix, $this->host, $this->user);
 	}
 
 	public function run() {
