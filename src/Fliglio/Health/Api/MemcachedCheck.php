@@ -2,7 +2,6 @@
 
 namespace Fliglio\Health\Api;
 
-use PhpAmqpLib\Connection\AMQPConnection;
 use Memcached;
 
 class MemcachedCheck implements HealthCheck {
