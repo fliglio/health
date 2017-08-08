@@ -1,6 +1,9 @@
 sudo: false
 language: php
 
+env:
+  TRAVIS_BUILD=true
+
 php:
   - 5.4
   - 5.5
