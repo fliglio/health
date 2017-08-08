@@ -8,16 +8,16 @@ class MemcachedCheck implements HealthCheck {
 
 	private $host;
 	private $port;
-	private $isDiscoverable;
 	private $namespace;
+	private $isDiscoverable;
 	private $expire = 0;
 	private $namespacePattern = "%s_%s";
 
-	public function __construct($host, $port, $isDiscoverable, $namespace) {
+	public function __construct($host, $port, $namespace, $isDiscoverable=false) {
 		$this->host           = $host;
 		$this->port           = $port;
-		$this->isDiscoverable = $isDiscoverable;
 		$this->namespace      = $namespace;
+		$this->isDiscoverable = $isDiscoverable;
 	}
 
 	public function getKey() {
