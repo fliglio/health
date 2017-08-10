@@ -30,7 +30,7 @@ class MemcachedCheck implements HealthCheck {
 
 			$store = new Memcached();
 			if ($this->isDiscoverable) {
-				// Specific to AWS Elasticache Autodiscovery (Constants do not exist elsewhere)
+				// Specific to AWS Elasticache Autodiscovery (Constants do not exist elsewhere) 
 				$store->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
 			}
 			$store->addServer($this->host, $this->port);
