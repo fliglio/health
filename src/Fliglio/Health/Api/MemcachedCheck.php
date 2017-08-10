@@ -33,7 +33,7 @@ class MemcachedCheck implements HealthCheck {
 				// Specific to AWS Elasticache Autodiscovery (Constants do not exist elsewhere)
 				$store->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
 			}
-			$store->addserver($this->host, $this->port);
+			$store->addServer($this->host, $this->port);
 
 			$key    = "key_".uniqid();
 			$string = "str_".uniqid();
