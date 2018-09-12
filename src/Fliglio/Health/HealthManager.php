@@ -3,11 +3,18 @@
 namespace Fliglio\Health;
 
 use Fliglio\Health\Api as api;
+use Fliglio\Health\Behavior\Behavior;
 
 class HealthManager {
 
 	private $checks = [];
+	private $behaviors = [];
 	private $optionalChecks = [];
+
+	public function addBehavior(Behavior $behavior) {
+		$this->behaviors[] = $behavior;
+		return $this;
+	}
 
 	public function addCheck(api\HealthCheck $check, $optional=false) {
 		if ($optional) {
@@ -49,6 +56,16 @@ class HealthManager {
 		}
 
 		return $status;
+	}
+
+	public function process() {
+		$status = $this->runAll();
+
+		foreach ($this->behaviors as $behavior) {
+			$status = $behavior->act($status);
+		}
+
+		return (new HealthStatusObjectMapper())->getEncoded($status);
 	}
 
 }

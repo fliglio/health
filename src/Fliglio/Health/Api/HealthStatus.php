@@ -32,6 +32,10 @@ class HealthStatus {
 		$this->status = $status;
 		return $this;
 	}
+	public function setChecks(array $checks) {
+		$this->checks = $checks;
+		return $this;
+	}
 	public function addCheck($key, $status) {
 		$this->checks[$key] = $status;
 	}
