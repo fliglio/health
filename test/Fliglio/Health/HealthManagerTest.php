@@ -56,24 +56,3 @@ class HealthManagerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 }
-
-class AlwaysUp implements api\HealthCheck {
-	public function getKey() { return __CLASS__; }
-	public function run() {
-		return api\HealthStatus::UP;
-	}
-}
-
-class AlwaysDown implements api\HealthCheck {
-	public function getKey() { return __CLASS__; }
-	public function run() {
-		return api\HealthStatus::DOWN;
-	}
-}
-
-class AlwaysWarn implements api\HealthCheck {
-	public function getKey() { return __CLASS__; }
-	public function run() {
-		return api\HealthStatus::WARN;
-	}
-}

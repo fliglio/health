@@ -10,6 +10,7 @@ class SshCheckTest extends \PHPUnit_Framework_TestCase {
 		if (getenv('TRAVIS_BUILD') == 'true') {
 			return;
 		}
+
 		// given
 		$iam = exec('whoami');
 

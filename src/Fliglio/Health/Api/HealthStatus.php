@@ -10,6 +10,7 @@ class HealthStatus {
 
 	private $status;
 	private $checks = [];
+	private $checkObjects = [];
 
 	public function isUp() {
 		return $this->status == self::UP;
@@ -27,13 +28,27 @@ class HealthStatus {
 	public function getChecks() {
 		return $this->checks;
 	}
+	public function getCheckObjects() {
+		return $this->checkObjects;
+	}
+	public function getCheckObject($key) {
+		return isset($this->checkObjects[$key]) ? $this->checkObjects[$key] : null;
+	}
 
 	public function setStatus($status) {
 		$this->status = $status;
 		return $this;
 	}
-	public function addCheck($key, $status) {
+	public function setChecks(array $checks) {
+		$this->checks = $checks;
+		return $this;
+	}
+	public function addCheck($key, $status, HealthCheck $object = null) {
 		$this->checks[$key] = $status;
+
+		if (!is_null($object)) {
+			$this->checkObjects[$key] = $object;
+		}
 	}
 
 }
