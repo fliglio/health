@@ -21,9 +21,26 @@ class MysqlCheck implements HealthCheck {
 	}
 
 	public function run() {
-		$conn = new \mysqli($this->host, $this->user, $this->pass);
+		$status = HealthStatus::UP;
 
-		return $conn->connect_error ? HealthStatus::DOWN : HealthStatus::UP;
+		$options = [
+			\PDO::ATTR_TIMEOUT => "1",
+			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+		];
+
+		try {
+			new \PDO(
+				sprintf("mysql:host=%s", $this->host), 
+				$this->user, 
+				$this->pass, 
+				$options
+			);
+
+		} catch (\Exception $e) {
+			$status = HealthStatus::DOWN;
+		}
+
+		return $status;
 	}
 
 }

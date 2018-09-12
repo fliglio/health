@@ -20,4 +20,11 @@ class MysqlCheckTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($manager->runAll()->isDown());
 	}
 
+	public function test_BadHost() {
+		$manager = new HealthManager();
+		$manager->addCheck(new MysqlCheck('foobar', 'root', ''));
+
+		$this->assertTrue($manager->runAll()->isDown());
+	}
+
 }
