@@ -30,7 +30,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_LogFailures() {
 		// given
-		$logger = m::mock(AbstractLogger::class);
+		$logger = m::mock('Psr\Log\AbstractLogger');
 
 		$manager = new HealthManager();
 		$manager->addBehavior(new LogFailuresBehavior($logger));
@@ -53,7 +53,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_LogWarnings() {
 		// given
-		$logger = m::mock(AbstractLogger::class);
+		$logger = m::mock('Psr\Log\AbstractLogger');
 
 		$manager = new HealthManager();
 		$manager->addBehavior(new LogWarningsBehavior($logger));
