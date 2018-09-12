@@ -77,7 +77,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_StatusCodes_Success() {
 		// given
-		$response = m::mock(ResponseWriter::class);
+		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
 		$manager->addBehavior(new StatusCodeBehavior($response));
@@ -95,7 +95,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_StatusCodes_Error() {
 		// given
-		$response = m::mock(ResponseWriter::class);
+		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
 		$manager->addBehavior(new StatusCodeBehavior($response));
@@ -115,7 +115,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 	// Non-optional warn is a "down", aka 500
 	public function test_StatusCodes_Warn() {
 		// given
-		$response = m::mock(ResponseWriter::class);
+		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
 		$manager->addBehavior(new StatusCodeBehavior($response));
