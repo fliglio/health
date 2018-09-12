@@ -8,10 +8,12 @@
 		"homepage": "http://www.philipwhitt.com"
 	}],
 	"require": {
-		"fliglio/web"   : "dev-master",
-		"fliglio/http"  : "dev-master",
-		"psr/log"       : "1.0.*",
-		"php-amqplib/php-amqplib": "2.6.*"
+		"php"                     : ">=5.4.0",
+		"ext-pdo"                 : "*",
+		"fliglio/web"             : "dev-master",
+		"fliglio/http"            : "dev-master",
+		"psr/log"                 : "1.0.*",
+		"php-amqplib/php-amqplib" : "2.6.*"
 	},
 	"require-dev": {
 		"mockery/mockery"    : "0.9.*",
