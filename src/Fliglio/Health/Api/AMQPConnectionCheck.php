@@ -4,14 +4,19 @@ namespace Fliglio\Health\Api;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 
-class AMQPConnectionCheck implements HealthCheck {
+class AMQPConnectionCheck implements HealthCheck, HealthCheckReport {
 
-	private $connection;
 	private $subkey;
+	private $connection;
+	private $errMsg;
 
 	public function __construct(AMQPConnection $connection, $subkey = "") {
 		$this->connection = $connection;
 		$this->subkey = $subkey;
+	}
+
+	public function getErrorMessage() {
+		return $this->errMsg;
 	}
 
 	public function getKey() {
@@ -22,6 +27,7 @@ class AMQPConnectionCheck implements HealthCheck {
 		if (!is_null($this->connection)) {
 			return HealthStatus::UP;
 		} else {
+			$this->errMsg = 'Connection was null';
 			return HealthStatus::DOWN;
 		}
 	}

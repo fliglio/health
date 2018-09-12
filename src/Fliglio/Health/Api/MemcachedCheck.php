@@ -4,7 +4,7 @@ namespace Fliglio\Health\Api;
 
 use Memcached;
 
-class MemcachedCheck implements HealthCheck {
+class MemcachedCheck implements HealthCheck, HealthCheckReport {
 
 	private $host;
 	private $port;
@@ -12,6 +12,7 @@ class MemcachedCheck implements HealthCheck {
 	private $isDiscoverable;
 	private $expire = 0;
 	private $namespacePattern = "%s_%s";
+	private $errMsg;
 
 	public function __construct($host, $port, $namespace, $isDiscoverable=false) {
 		$this->host           = $host;
@@ -20,19 +21,25 @@ class MemcachedCheck implements HealthCheck {
 		$this->isDiscoverable = $isDiscoverable;
 	}
 
+	public function getErrorMessage() {
+		return $this->errMsg;
+	}
+
 	public function getKey() {
 		return 'memcached::'.$this->host;
 	}
 
 	public function run() {
-		try {
-			$result = HealthStatus::DOWN;
+		$result = HealthStatus::DOWN;
 
+		try {
 			$store = new Memcached();
+
 			if ($this->isDiscoverable) {
 				// Specific to AWS Elasticache Autodiscovery (Constants do not exist elsewhere) 
 				$store->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
 			}
+
 			$store->addServer($this->host, $this->port);
 
 			$key    = "key_".uniqid();
@@ -47,8 +54,10 @@ class MemcachedCheck implements HealthCheck {
 			if ($store->get($nsKey) == $string) {
 				$result = HealthStatus::UP;
 			}
+
 		} catch (\Exception $e) {
 			// Catch and allow healthstatus of down to be returned
+			$this->errMsg = (string)$e->getMessage();
 		}
 
 		return $result;

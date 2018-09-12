@@ -25,6 +25,11 @@ class HealthManager {
 		return $this;
 	}
 
+	public function addOptionalCheck(api\HealthCheck $check) {
+		$this->optionalChecks[] = $check;
+		return $this;
+	}
+
 	public function runAll() {
 		$status = new api\HealthStatus();
 		$status->setStatus(api\HealthStatus::UP);
@@ -36,7 +41,7 @@ class HealthManager {
 				$result = $check->run();
 			} catch (\Exception $e) {}
 
-			$status->addCheck($check->getKey(), $result);
+			$status->addCheck($check->getKey(), $result, $check);
 
 			if ($result != api\HealthStatus::UP) {
 				$status->setStatus(api\HealthStatus::DOWN);
@@ -52,7 +57,7 @@ class HealthManager {
 				$result = api\HealthStatus::WARN;
 			}
 
-			$status->addCheck($check->getKey(), $result);
+			$status->addCheck($check->getKey(), $result, $check);
 		}
 
 		return $status;

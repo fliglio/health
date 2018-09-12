@@ -2,12 +2,17 @@
 
 namespace Fliglio\Health\Api;
 
-class CanWriteCheck implements HealthCheck {
+class CanWriteCheck implements HealthCheck, HealthCheckReport {
 
 	private $dest;
+	private $errMsg;
 
 	public function __construct($dest) {
 		$this->dest = $dest;
+	}
+
+	public function getErrorMessage() {
+		return $this->errMsg;
 	}
 
 	public function getKey() {
@@ -15,7 +20,14 @@ class CanWriteCheck implements HealthCheck {
 	}
 
 	public function run() {
-		return is_writable($this->dest) ? HealthStatus::UP : HealthStatus::DOWN;
+		$status = HealthStatus::UP;
+
+		if (!is_writable($this->dest)) {
+			$this->errMsg = sprintf('%s is not writable', $this->dest);
+			$status = HealthStatus::DOWN;
+		}
+
+		return $status;
 	}
 
 }

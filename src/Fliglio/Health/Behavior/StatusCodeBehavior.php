@@ -20,9 +20,6 @@ class StatusCodeBehavior implements Behavior {
 
 		} else if ($status->isDown()) {
 			$this->response->setStatus(Http::STATUS_INTERNAL_SERVER_ERROR);
-
-		} else if ($status->isWarn()) {
-			$this->response->setStatus(Http::STATUS_ACCEPTED);
 		}
 
 		return $status;

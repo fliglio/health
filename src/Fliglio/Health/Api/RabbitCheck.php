@@ -4,13 +4,14 @@ namespace Fliglio\Health\Api;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 
-class RabbitCheck implements HealthCheck {
+class RabbitCheck implements HealthCheck, HealthCheckReport {
 
 	private $host;
 	private $virtualHost;
 	private $user;
 	private $password;
 	private $port;
+	private $errMsg;
 
 	public function __construct($host, $virtualHost, $user, $password, $port) {
 		$this->host        = $host;
@@ -18,6 +19,10 @@ class RabbitCheck implements HealthCheck {
 		$this->user        = $user;
 		$this->password    = $password;
 		$this->port        = $port;
+	}
+
+	public function getErrorMessage() {
+		return $this->errMsg;
 	}
 
 	public function getKey() {
@@ -45,6 +50,7 @@ class RabbitCheck implements HealthCheck {
 			return HealthStatus::UP;
 
 		} catch (\Exception $e) {
+			$this->errMsg = $e->getMessage();
 			return HealthStatus::DOWN;
 		}
 	}

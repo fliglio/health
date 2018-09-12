@@ -2,18 +2,25 @@
 
 namespace Fliglio\Health\Api;
 
-class MysqlCheck implements HealthCheck {
+use Pdo;
+
+class MysqlCheck implements HealthCheck, HealthCheckReport {
 
 	private $host;
 	private $user;
 	private $pass;
 	private $prefix;
+	private $errMsg;
 
 	public function __construct($host, $user, $pass, $prefix=null) {
 		$this->host = $host;
 		$this->user = $user;
 		$this->pass = $pass;
 		$this->prefix = $prefix;
+	}
+
+	public function getErrorMessage() {
+		return $this->errMsg;
 	}
 
 	public function getKey() {
@@ -24,12 +31,12 @@ class MysqlCheck implements HealthCheck {
 		$status = HealthStatus::UP;
 
 		$options = [
-			\PDO::ATTR_TIMEOUT => "1",
-			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+			PDO::ATTR_TIMEOUT => "1", // timeout in seconds
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 		];
 
 		try {
-			new \PDO(
+			new PDO(
 				sprintf("mysql:host=%s", $this->host), 
 				$this->user, 
 				$this->pass, 
@@ -37,6 +44,7 @@ class MysqlCheck implements HealthCheck {
 			);
 
 		} catch (\Exception $e) {
+			$this->errMsg = $e->getMessage();
 			$status = HealthStatus::DOWN;
 		}
 

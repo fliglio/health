@@ -9,6 +9,7 @@ use Fliglio\Health\AlwaysUp;
 use Fliglio\Health\AlwaysDown;
 use Fliglio\Health\AlwaysWarn;
 use Fliglio\Health\HealthManager;
+use Fliglio\Http\ResponseWriter;
 
 class BehaviorTest extends \PHPUnit_Framework_TestCase { 
 
@@ -31,7 +32,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 		// given
 		$logger = m::mock(AbstractLogger::class);
 
-		$manager = new HealthManager($logger);
+		$manager = new HealthManager();
 		$manager->addBehavior(new LogFailuresBehavior($logger));
 
 		$manager->addCheck(new AlwaysUp())
@@ -39,7 +40,12 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 		// then
 		$logger->shouldReceive('log')
-			->with(LogLevel::ERROR, 'Fliglio\Health\AlwaysDown is failing', []);
+			->with(LogLevel::ERROR, 'Fliglio\Health\AlwaysDown is failing', [])
+			->once();
+
+		$logger->shouldReceive('log')
+			->with(LogLevel::ERROR, AlwaysDown::ERR_MSG, [])
+			->once();
 
 		// when
 		$output = $manager->process();
@@ -49,7 +55,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 		// given
 		$logger = m::mock(AbstractLogger::class);
 
-		$manager = new HealthManager($logger);
+		$manager = new HealthManager();
 		$manager->addBehavior(new LogWarningsBehavior($logger));
 
 		$manager->addCheck(new AlwaysUp())
@@ -58,9 +64,71 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 		// then
 		$logger->shouldReceive('log')
-			->with(LogLevel::WARNING, 'Fliglio\Health\AlwaysWarn is warning', []);
+			->with(LogLevel::WARNING, 'Fliglio\Health\AlwaysWarn is warning', [])
+			->once();
+
+		$logger->shouldReceive('log')
+			->with(LogLevel::WARNING, AlwaysWarn::ERR_MSG, [])
+			->once();
 
 		// when
 		$output = $manager->process();
 	}
+
+	public function test_StatusCodes_Success() {
+		// given
+		$response = m::mock(ResponseWriter::class);
+
+		$manager = new HealthManager();
+		$manager->addBehavior(new StatusCodeBehavior($response));
+
+		$manager->addCheck(new AlwaysUp());
+
+		// then
+		$response->shouldReceive('setStatus')
+			->with(200)
+			->once();
+
+		// when
+		$output = $manager->process();
+	}
+
+	public function test_StatusCodes_Error() {
+		// given
+		$response = m::mock(ResponseWriter::class);
+
+		$manager = new HealthManager();
+		$manager->addBehavior(new StatusCodeBehavior($response));
+
+		$manager->addCheck(new AlwaysUp())
+			->addCheck(new AlwaysDown());
+
+		// then
+		$response->shouldReceive('setStatus')
+			->with(500)
+			->once();
+
+		// when
+		$output = $manager->process();
+	}
+
+	// Non-optional warn is a "down", aka 500
+	public function test_StatusCodes_Warn() {
+		// given
+		$response = m::mock(ResponseWriter::class);
+
+		$manager = new HealthManager();
+		$manager->addBehavior(new StatusCodeBehavior($response));
+
+		$manager->addCheck(new AlwaysWarn());
+
+		// then
+		$response->shouldReceive('setStatus')
+			->with(500)
+			->once();
+
+		// when
+		$output = $manager->process();
+	}
+
 }
