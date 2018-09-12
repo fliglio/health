@@ -6,7 +6,7 @@
 Extensible suite of health checks for PHP services, complete with custom behaviors to suit your health check consumer's needs. Default health checks include Mysql, Rabbit, Memcache, Can Write File, SSH and HttpResolver.
 
 
-# Example One:
+# Example One, Basic MySql Check:
 ```
 $manager = new HealthManager();
 $manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
@@ -24,7 +24,7 @@ If the connection is not good, for whatever reason, you'll get:
 ```
 
 
-# Example Two:
+# Example Two, Optional Checks:
 ```
 $manager = new HealthManager();
 $manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'))
