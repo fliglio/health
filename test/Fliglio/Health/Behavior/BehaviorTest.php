@@ -40,11 +40,11 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 		// then
 		$logger->shouldReceive('log')
-			->with(LogLevel::ERROR, 'Fliglio\Health\AlwaysDown is failing', [])
+			->with(LogLevel::ERROR, Logger::LOG_NS.' Fliglio\Health\AlwaysDown is failing', [])
 			->once();
 
 		$logger->shouldReceive('log')
-			->with(LogLevel::ERROR, AlwaysDown::ERR_MSG, [])
+			->with(LogLevel::ERROR, Logger::LOG_NS.' '.AlwaysDown::ERR_MSG, [])
 			->once();
 
 		// when
@@ -64,11 +64,11 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 		// then
 		$logger->shouldReceive('log')
-			->with(LogLevel::WARNING, 'Fliglio\Health\AlwaysWarn is warning', [])
+			->with(LogLevel::WARNING, Logger::LOG_NS.' Fliglio\Health\AlwaysWarn is warning', [])
 			->once();
 
 		$logger->shouldReceive('log')
-			->with(LogLevel::WARNING, AlwaysWarn::ERR_MSG, [])
+			->with(LogLevel::WARNING, Logger::LOG_NS.' '.AlwaysWarn::ERR_MSG, [])
 			->once();
 
 		// when

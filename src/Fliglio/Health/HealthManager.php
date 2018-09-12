@@ -60,15 +60,15 @@ class HealthManager {
 			$status->addCheck($check->getKey(), $result, $check);
 		}
 
+		foreach ($this->behaviors as $behavior) {
+			$status = $behavior->act($status);
+		}
+
 		return $status;
 	}
 
 	public function process() {
 		$status = $this->runAll();
-
-		foreach ($this->behaviors as $behavior) {
-			$status = $behavior->act($status);
-		}
 
 		return (new HealthStatusObjectMapper())->getEncoded($status);
 	}

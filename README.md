@@ -8,67 +8,67 @@ Extensible suite of health checks for PHP services, complete with custom behavio
 
 # Example One:
 ```
-		$manager = new HealthManager();
-		$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
+$manager = new HealthManager();
+$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
 
-		echo json_encode($manager->process());
+echo json_encode($manager->process());
 ```
 If your connection information is good, you should see:
 ```
-		{"status":"UP", "mysql::localhost;myuser":"UP"}
+{"status":"UP", "mysql::localhost;myuser":"UP"}
 ```
 
 If the connection is not good, for whatever reason, you'll get:
 ```
-		{"status":"DOWN", "mysql::localhost;myuser":"DOWN"}
+{"status":"DOWN", "mysql::localhost;myuser":"DOWN"}
 ```
 
 
 # Example Two:
 ```
-		$manager = new HealthManager();
-		$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'))
-			->addOptionalCheck(new RabbitCheck('localhost', '/'', 'myuser', 'password'));
+$manager = new HealthManager();
+$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'))
+	->addOptionalCheck(new RabbitCheck('localhost', '/'', 'myuser', 'password'));
 
-		echo json_encode($manager->process());
+echo json_encode($manager->process());
 ```
 If the optional check is down, the status will remain "UP". Example:
 ```
-		{"status":"UP", "mysql::localhost;myuser":"UP", "rabbit::localhost;myuser":"WARN"}
+{"status":"UP", "mysql::localhost;myuser":"UP", "rabbit::localhost;myuser":"WARN"}
 ```
 
 
 # Behavior Example:
 Depending on your apps health check reporting needs, you can add behaviors. 
 ```
-		$response = new fliglio\Response();
+$response = new fliglio\Response();
 
-		$manager = new HealthManager();
-		$manager->addBehavior(new SilentOutputBehavior())
-			->addBehavior(new LogFailuresBehavior())
-			->addBehavior(new StatusCodeBehavior($response);
+$manager = new HealthManager();
+$manager->addBehavior(new SilentOutputBehavior())
+	->addBehavior(new LogFailuresBehavior())
+	->addBehavior(new LogWarningsBehavior())
+	->addBehavior(new StatusCodeBehavior($response);
 
-		$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
+$manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
 
-		echo json_encode($manager->process());
+echo json_encode($manager->process());
 ```
 If the check is up, you will get HTTP 200 and a single json property. Example:
 ```
-		{"status":"UP"}
+{"status":"UP"}
 ```
 If the check is down, you will get HTTP 500, a message in the php log and a single json property. Example:
 ```
-		{"status":"DOWN"}
+{"status":"DOWN"}
 ```
 
 # Public AWS ALB Behavior Example:
 ```
-		$response = new fliglio\Response();
+$response = new fliglio\Response();
 
-		$manager = new HealthManager();
-		$manager->addBehavior(new SilentOutputBehavior())
-			->addBehavior(new StatusCodeBehavior($response);
-
+$manager = new HealthManager();
+$manager->addBehavior(new SilentOutputBehavior())
+	->addBehavior(new StatusCodeBehavior($response);
 ```
 
 # Custom Health Checks:
