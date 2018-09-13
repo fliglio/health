@@ -36,7 +36,7 @@ If the connection is not good, for whatever reason, you'll get:
 ```php
 $manager = new HealthManager();
 $manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'))
-	->addOptionalCheck(new RabbitCheck('localhost', '/'', 'myuser', 'password'));
+	->addOptionalCheck(new RabbitCheck('localhost', '/', 'myuser', 'password'));
 
 echo json_encode($manager->process());
 ```
@@ -52,9 +52,9 @@ Depending on your apps health check reporting needs, you can add behaviors.
 $response = new fliglio\Response();
 
 $manager = new HealthManager();
-$manager->addBehavior(new SilentOutputBehavior())
-	->addBehavior(new LogFailuresBehavior())
+$manager->addBehavior(new LogFailuresBehavior())
 	->addBehavior(new LogWarningsBehavior())
+	->addBehavior(new SilentOutputBehavior())
 	->addBehavior(new StatusCodeBehavior($response);
 
 $manager->addCheck(new MysqlCheck('localhost', 'myuser', 'password'));
@@ -68,6 +68,14 @@ If the check is up, you will get HTTP 200 and a single json property. Example:
 If the check is down, you will get HTTP 500, a message in the php log and a single json property. Example:
 ```json
 {"status":"DOWN"}
+```
+
+# Silent Output + Logging Caveat:
+If you want to log issue + have silent output, you have to put the SilentOutputBehavior after the loggers - otherwise the loggers wont know if there were any issues. 
+```php
+$manager = new HealthManager();
+$manager->addBehavior(new LogIssuesBehavior())
+	->addBehavior(new SilentOutputBehavior());
 ```
 
 # Public AWS ALB Behavior Example:
