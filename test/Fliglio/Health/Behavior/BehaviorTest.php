@@ -75,6 +75,38 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 		$output = $manager->process();
 	}
 
+	public function test_LogIssues() {
+		// given
+		$logger = m::mock('Psr\Log\AbstractLogger');
+
+		$manager = new HealthManager();
+		$manager->addBehavior(new LogIssuesBehavior($logger));
+
+		$manager->addCheck(new AlwaysUp())
+			->addCheck(new AlwaysWarn())
+			->addCheck(new AlwaysDown());
+
+		// then
+		$logger->shouldReceive('log')
+			->with(LogLevel::WARNING, Logger::LOG_NS.' Fliglio\Health\AlwaysWarn is warning', [])
+			->once();
+
+		$logger->shouldReceive('log')
+			->with(LogLevel::WARNING, Logger::LOG_NS.' '.AlwaysWarn::ERR_MSG, [])
+			->once();
+
+		$logger->shouldReceive('log')
+			->with(LogLevel::ERROR, Logger::LOG_NS.' Fliglio\Health\AlwaysDown is failing', [])
+			->once();
+
+		$logger->shouldReceive('log')
+			->with(LogLevel::ERROR, Logger::LOG_NS.' '.AlwaysDown::ERR_MSG, [])
+			->once();
+
+		// when
+		$output = $manager->process();
+	}
+
 	public function test_StatusCodes_Success() {
 		// given
 		$response = m::mock('Fliglio\Http\ResponseWriter');
