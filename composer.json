@@ -10,8 +10,8 @@
 	"require": {
 		"php"                     : ">=5.4.0",
 		"ext-pdo"                 : "*",
-		"fliglio/web"             : "2.1.*",
-		"fliglio/http"            : "2.1.*",
+		"fliglio/web"             : "dev-master",
+		"fliglio/http"            : "dev-master",
 		"psr/log"                 : "1.0.*",
 		"php-amqplib/php-amqplib" : "2.6.*"
 	},
