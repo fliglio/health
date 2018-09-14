@@ -36,7 +36,7 @@ class RabbitCheck implements HealthCheck, HealthCheckReport {
 				$this->port,
 				$this->user,
 				$this->password,
-				$this->virtualHost = '/',
+				$this->virtualHost,
 				$insist = false,
 				$login_method = 'AMQPLAIN',
 				$login_response = null,
