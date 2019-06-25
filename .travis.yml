@@ -1,6 +1,9 @@
 sudo: false
 language: php
 
+services:
+  - mysql
+
 env:
   TRAVIS_BUILD=true
 
