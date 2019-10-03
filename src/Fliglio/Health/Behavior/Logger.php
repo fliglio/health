@@ -2,8 +2,8 @@
 
 namespace Fliglio\Health\Behavior;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Log\AbstractLogger;
 use Fliglio\Health\Api\HealthStatus;
 use Fliglio\Health\Api\HealthCheckReport;
 
@@ -13,7 +13,7 @@ class Logger {
 
 	private $logger;
 
-	public function __construct(AbstractLogger $logger = null) {
+	public function __construct(LoggerInterface $logger = null) {
 		$this->logger = $logger;
 	}
 
