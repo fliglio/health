@@ -3,7 +3,6 @@
 namespace Fliglio\Health\Behavior;
 
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use Fliglio\Health\Api\HealthStatus;
 use Fliglio\Health\Api\HealthCheckReport;
 

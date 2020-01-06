@@ -1,7 +1,7 @@
 <phpunit colors="true" backupGlobals="false" bootstrap="bootstrap.php">
 	<testsuites>
-	    <testsuite name="Fliglio">
-			<directory>Fliglio</directory>
+	    <testsuite name="Fliglio Health">
+			<directory>../test</directory>
 		</testsuite>
 	</testsuites>
 
