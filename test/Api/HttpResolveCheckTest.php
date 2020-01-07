@@ -27,4 +27,13 @@ class HttpResolveCheckTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($manager->runAll()->isDown());
 	}
 
+
+	public function test_CheckUpWithOptional() {
+		$manager = new HealthManager();
+		$manager->addCheck(new HttpResolveCheck('http://google.com'));
+		$manager->addOptionalCheck(new HttpResolveCheck('http://badhostname'));
+
+		$this->assertTrue($manager->runAll()->isUp());
+	}
+
 }
