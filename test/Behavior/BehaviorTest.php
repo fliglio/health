@@ -4,12 +4,12 @@ namespace Fliglio\Health\Behavior;
 
 use Mockery as m;
 use Psr\Log\LogLevel;
-use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 use Fliglio\Health\AlwaysUp;
 use Fliglio\Health\AlwaysDown;
 use Fliglio\Health\AlwaysWarn;
-use Fliglio\Health\HealthManager;
 use Fliglio\Http\ResponseWriter;
+use Fliglio\Health\HealthManager;
 
 class BehaviorTest extends \PHPUnit_Framework_TestCase { 
 
@@ -30,6 +30,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_LogFailures() {
 		// given
+		/** @var LoggerInterface $logger */
 		$logger = m::mock('Psr\Log\AbstractLogger');
 
 		$manager = new HealthManager();
@@ -48,11 +49,12 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
 	}
 
 	public function test_LogWarnings() {
 		// given
+		/** @var LoggerInterface $logger */
 		$logger = m::mock('Psr\Log\AbstractLogger');
 
 		$manager = new HealthManager();
@@ -72,11 +74,12 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
 	}
 
 	public function test_LogIssues() {
 		// given
+		/** @var LoggerInterface $logger */
 		$logger = m::mock('Psr\Log\AbstractLogger');
 
 		$manager = new HealthManager();
@@ -104,11 +107,26 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
+	}
+
+	public function test_ReturnStatusEvenWhenLoggerNull() {
+		// given
+		$manager = new HealthManager();
+		$manager->addBehavior(new LogIssuesBehavior());
+
+		$manager->addCheck(new AlwaysDown());
+
+		// when
+		$healthStatus = $manager->process();
+		
+		// then
+		$this->assertEquals('DOWN', $healthStatus['status']);
 	}
 
 	public function test_StatusCodes_Success() {
 		// given
+		/** @var ResponseWriter $response */
 		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
@@ -122,11 +140,14 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
 	}
+
+
 
 	public function test_StatusCodes_Error() {
 		// given
+		/** @var ResponseWriter $response */
 		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
@@ -141,12 +162,13 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
 	}
 
 	// Non-optional warn is a "down", aka 500
 	public function test_StatusCodes_Warn() {
 		// given
+		/** @var ResponseWriter $response */
 		$response = m::mock('Fliglio\Http\ResponseWriter');
 
 		$manager = new HealthManager();
@@ -160,7 +182,7 @@ class BehaviorTest extends \PHPUnit_Framework_TestCase {
 			->once();
 
 		// when
-		$output = $manager->process();
+		$manager->process();
 	}
 
 }
