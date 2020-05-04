@@ -2,8 +2,6 @@
 
 namespace Fliglio\Health;
 
-use Fliglio\Health\Api as api;
-
 class HealthManagerTest extends \PHPUnit_Framework_TestCase { 
 
 	public function test_TopLevelStatusReportsDown() {
