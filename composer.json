@@ -13,7 +13,7 @@
 		"ext-pdo"                 : "*",
 		"fliglio/http"            : "dev-master",
 		"psr/log"                 : "1.*",
-		"php-amqplib/php-amqplib" : "2.*"
+		"php-amqplib/php-amqplib" : "2.*||3.*"
 	},
 	"require-dev": {
 		"mockery/mockery"    : "1.*",
