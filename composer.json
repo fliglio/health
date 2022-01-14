@@ -29,6 +29,7 @@
 		}
 	},
 	"suggest": {
+		"fliglio/http": "For Fliglio apps only. HTTP reporting.",
 		"php-amqplib/php-amqplib": "For RabbitMQ health checks",
 		"ext-pdo": "For mysql health checks"
 	}
