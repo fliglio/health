@@ -2,7 +2,7 @@
 
 namespace Fliglio\Health\Api;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class RabbitCheck implements HealthCheck, HealthCheckReport {
 
@@ -31,22 +31,13 @@ class RabbitCheck implements HealthCheck, HealthCheckReport {
 
 	public function run() {
 		try {
-			$conn = new AMQPConnection(
+			$conn = new AMQPStreamConnection(
 				$this->host,
 				$this->port,
 				$this->user,
 				$this->password,
-				$this->virtualHost,
-				$insist = false,
-				$login_method = 'AMQPLAIN',
-				$login_response = null,
-				$locale = 'en_US',
-				$connection_timeout = 1.0,
-				$read_write_timeout = 1.0,
-				$context = null,
-				$keepalive = false,
-				$heartbeat = 0
-			);	
+				$this->virtualHost
+			);
 			return HealthStatus::UP;
 
 		} catch (\Exception $e) {

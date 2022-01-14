@@ -2,7 +2,9 @@
 
 namespace Fliglio\Health;
 
-class HealthManagerTest extends \PHPUnit_Framework_TestCase { 
+use PHPUnit\Framework\TestCase;
+
+class HealthManagerTest extends TestCase { 
 
 	public function test_TopLevelStatusReportsDown() {
 		$manager = new HealthManager();

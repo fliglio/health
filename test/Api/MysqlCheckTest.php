@@ -2,20 +2,31 @@
 
 namespace Fliglio\Health\Api;
 
+use PHPUnit\Framework\TestCase;
 use Fliglio\Health\HealthManager;
 
-class MysqlCheckTest extends \PHPUnit_Framework_TestCase { 
+class MysqlCheckTest extends TestCase { 
 
 	public function test_CheckUp() {
 		$manager = new HealthManager();
-		$manager->addCheck(new MysqlCheck('127.0.0.1', 'root', ''));
+
+		$manager->addCheck(new MysqlCheck(
+			getenv('DB_HOST'), 
+			getenv('DB_USERNAME'), 
+			getenv('DB_PASSWORD')
+		));
 
 		$this->assertTrue($manager->runAll()->isUp());
 	}
 
 	public function test_CheckDown() {
 		$manager = new HealthManager();
-		$manager->addCheck(new MysqlCheck('127.0.0.1', 'root', 'badpasswordandstuff'));
+
+		$manager->addCheck(new MysqlCheck(
+			getenv('DB_HOST'), 
+			getenv('DB_USERNAME'), 
+			'badpassword'
+		));
 
 		$this->assertTrue($manager->runAll()->isDown());
 	}

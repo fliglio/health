@@ -1,0 +1,35 @@
+version: "2.1"
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    env_file:
+      - ./env.test
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    env_file:
+      - ./env.test
+
+  phpinstall:
+    image: composer
+    working_dir: /var/app
+    command: composer up --ignore-platform-req=ext-sockets
+    volumes:
+      - .:/var/app
+      - ~/.composer/cache:/root/.composer/cache
+
+  test:
+    build: .
+    working_dir: /var/app
+    command: php vendor/bin/phpunit -c phpunit.xml
+    links:
+      - mysql:mysql
+      - rabbitmq:rabbitmq
+    env_file:
+      - ./env.test
+    volumes:
+      - .:/var/app

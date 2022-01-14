@@ -10,8 +10,11 @@ use Fliglio\Health\AlwaysDown;
 use Fliglio\Health\AlwaysWarn;
 use Fliglio\Http\ResponseWriter;
 use Fliglio\Health\HealthManager;
+use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class BehaviorTest extends \PHPUnit_Framework_TestCase { 
+class BehaviorTest extends TestCase { 
+	use MockeryPHPUnitIntegration;
 
 	public function test_SilentOutput() {
 		// given

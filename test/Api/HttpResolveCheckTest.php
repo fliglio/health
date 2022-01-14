@@ -2,9 +2,10 @@
 
 namespace Fliglio\Health\Api;
 
+use PHPUnit\Framework\TestCase;
 use Fliglio\Health\HealthManager;
 
-class HttpResolveCheckTest extends \PHPUnit_Framework_TestCase { 
+class HttpResolveCheckTest extends TestCase { 
 
 	public function test_CheckUpWithProtocol() {
 		$manager = new HealthManager();

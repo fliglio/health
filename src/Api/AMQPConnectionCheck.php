@@ -2,7 +2,7 @@
 
 namespace Fliglio\Health\Api;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AbstractConnection;
 
 class AMQPConnectionCheck implements HealthCheck, HealthCheckReport {
 
@@ -10,7 +10,7 @@ class AMQPConnectionCheck implements HealthCheck, HealthCheckReport {
 	private $connection;
 	private $errMsg;
 
-	public function __construct(AMQPConnection $connection, $subkey = "") {
+	public function __construct(AbstractConnection $connection=null, $subkey = "") {
 		$this->connection = $connection;
 		$this->subkey = $subkey;
 	}

@@ -9,15 +9,14 @@
 		"homepage": "http://www.philipwhitt.com"
 	}],
 	"require": {
-		"php"                     : ">=5.6",
-		"ext-pdo"                 : "*",
-		"fliglio/http"            : "dev-master",
-		"psr/log"                 : "1.*",
-		"php-amqplib/php-amqplib" : "2.*||3.*"
+		"php"                     : "^7.4||^8",
+		"psr/log"                 : "1.*"
 	},
 	"require-dev": {
-		"mockery/mockery"    : "1.*",
-		"phpunit/phpunit"    : "5.*"
+		"fliglio/http"            : "2.1.*",
+		"php-amqplib/php-amqplib" : "3.*",
+		"mockery/mockery"         : "1.*",
+		"phpunit/phpunit"         : "^8"
 	},
 	"autoload": {
 		"psr-4": {
@@ -28,5 +27,9 @@
 		"psr-4": {
 			"Fliglio\\Health\\" : "test"
 		}
+	},
+	"suggest": {
+		"php-amqplib/php-amqplib": "For RabbitMQ health checks",
+		"ext-pdo": "For mysql health checks"
 	}
 }
